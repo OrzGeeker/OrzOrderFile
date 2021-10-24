@@ -89,7 +89,7 @@ end
 一行命令，打开示例工程: 
 
 ```bash
-git clone https://github.com/OrzGeeker/OrzOrderFile.git && cd OrzOrderFile/App && bundle && bundle exec pod install && xed .
+rm -rf OrzOrderFile && git clone https://github.com/OrzGeeker/OrzOrderFile.git && cd OrzOrderFile/App && bundle && bundle exec pod install && xed .
 ```
 
 ## 参考文档
