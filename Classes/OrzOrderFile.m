@@ -56,7 +56,9 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     ];
     
     UIViewController *currentVC = [OrzOrderFile getCurrentVC];
-    [currentVC presentViewController:controller animated:YES completion:nil];
+    if(![currentVC isKindOfClass:UIActivityViewController.class]) {
+        [currentVC presentViewController:controller animated:YES completion:nil];
+    }
 }
 #pragma mark - 私有方法
 + (NSString *)orderFilePath {
