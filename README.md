@@ -86,16 +86,10 @@ end
 
 ## App 示例工程
 
-下面的命令行，展示如何安装示例App运行环境，及打开项目文件：
+一行命令，打开示例工程: 
 
 ```bash
-$ bundle
-Fetching gem metadata from https://rubygems.org/.......
-Fetching rexml 3.2.5
-...
-Bundle complete! 2 Gemfile dependencies, 37 gems now installed.
-Bundled gems are installed into `./vendor/bundle`
-$ bundle exec pod install && xed .
+git clone https://github.com/OrzGeeker/OrzOrderFile.git && cd OrzOrderFile/App && bundle && bundle exec pod install && xed .
 ```
 
 ## 参考文档
