@@ -45,8 +45,11 @@ post_install do |installer|
   end
   
   # 改变所有pods的设置
+  ignore_targets = ["OrzOrderFile"]
   installer.pods_project.targets.each do |target|
-    custom_target_build_settings(target)
+    unless ignore_targets.include?(target.name)
+      custom_target_build_settings(target)
+    end
   end
   
 end

@@ -13,8 +13,10 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
 
 @implementation OrzOrderFile
 + (void)stopRecordOrderFileSymbols {
-    isStopRecordOrderFileSymbols = YES;
-    [OrzOrderFile writeToFileWithSymbols:getOrderFileSymbols()];
+    if(!isStopRecordOrderFileSymbols) {
+        isStopRecordOrderFileSymbols = YES;
+        [OrzOrderFile writeToFileWithSymbols:getOrderFileSymbols()];
+    }
 }
 + (void)writeToFileWithSymbols:(NSArray *)symbols {
     if(symbols.count <= 0) {
@@ -36,6 +38,10 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
 }
 + (void)shareOrderFileWithAirDrop {
     NSString *orderFilePath = [OrzOrderFile orderFilePath];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
+        NSLog(@"OrzOrderFile: 还未生成OrderFile");
+        return;
+    }
     NSURL *url = [NSURL fileURLWithPath:orderFilePath];
     NSArray *objectsToShare = @[url];
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
@@ -123,10 +129,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     });
 }
 - (void)deviceProximityStateChange:(NSNotification *)notification {
-    if ([UIDevice currentDevice].proximityState == YES) {
-        [OrzOrderFile stopRecordOrderFileSymbols];
-    } else {
-        [OrzOrderFile shareOrderFileWithAirDrop];
-    }
+    [OrzOrderFile stopRecordOrderFileSymbols];
+    [OrzOrderFile shareOrderFileWithAirDrop];
 }
 @end

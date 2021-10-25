@@ -37,7 +37,7 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols() {
         dladdr(node->pc, &info);
         
         NSString *symbol = [NSString stringWithUTF8String:info.dli_sname];
-        if (symbol.length > 0 && ![symbols containsObject:symbol] && [symbol rangeOfString:NSStringFromClass(OrzOrderFile.class)].location == NSNotFound) {
+        if (symbol.length > 0 && ![symbols containsObject:symbol]) {
             [symbols insertObject:symbol atIndex:0];
         }
     }
@@ -69,11 +69,8 @@ extern "C" void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     }
     
     void *PC = __builtin_return_address(0);
-    SymbolNode *node = (SymbolNode *)malloc(sizeof(SymbolNode));
-    node->pc = PC;
-    node->next = NULL;
-     
-    //入队, offsetof 用在这里是为了入队添加下一个节点找到 前一个节点next指针的位置
+    SymbolNode * node = (SymbolNode *)malloc(sizeof(SymbolNode));
+    *node = (SymbolNode){PC,NULL};
     OSAtomicEnqueue(&symboList, node, offsetof(SymbolNode, next));
 }
 #endif

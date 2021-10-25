@@ -2,6 +2,14 @@
 
 iOS 工程二进制重排 Clang插桩方式 获取 OrderFile
 
+## App 示例工程
+
+一行命令，打开示例工程: 
+
+```bash
+rm -rf OrzOrderFile && git clone https://github.com/OrzGeeker/OrzOrderFile.git && cd OrzOrderFile/App && bundle && bundle exec pod install && xed .
+```
+
 ## Usage
 
 1. Podfile 中引入库依赖
@@ -18,50 +26,11 @@ install! 'cocoapods',
     :incremental_installation => false
 ```
 
-3. Podfile 中添加下面 Hook 代码
-
-```bash
-def custom_target_build_settings(target)
-  target.build_configurations.each do |build_configuration|
-    # for objective-c
-    other_cflags = build_configuration.build_settings['OTHER_CFLAGS']
-    build_configuration.build_settings['OTHER_CFLAGS'] = ['$(inherited)',other_cflags, '-fsanitize-coverage=func,trace-pc-guard'].flatten.uniq.compact
-    # for swift
-    other_swift_flags = build_configuration.build_settings['OTHER_SWIFT_FLAGS']
-    if other_swift_flags.is_a?(String)
-      other_swift_flags = other_swift_flags.split("\s").uniq
-    end
-    build_configuration.build_settings['OTHER_SWIFT_FLAGS'] = ['$(inherited)',other_swift_flags, '-sanitize-coverage=func,trace-pc-guard','-sanitize=undefined'].flatten.uniq.compact
-  end
-end
-
-post_install do |installer|
-
-  # 改变主工程设置
-  installer.aggregate_targets.each do |aggregate_target|
-    project_path = aggregate_target.user_project.path
-    project = Xcodeproj::Project.open(project_path)
-    project.targets.each do |target|
-      # 只有主工程添加，扩展Target不添加
-      unless target.extension_target_type?
-        custom_target_build_settings(target)
-      end
-    end
-    project.save
-  end
-  
-  # 改变所有pods的设置
-  installer.pods_project.targets.each do |target|
-    custom_target_build_settings(target)
-  end
-  
-end
-```
+3. Podfile 中添加 Hook 代码，参考[示例工程Podfile](./App/Podfile)内容
 
 4. 源码编译主工程，获取全部调用符号
-    - 使用iPhone的距离传感器，决定是否写入文件。
-    - 用手遮住距离传感器，黑屏时写入文件。
-    - 不遮挡距离传感器，从黑屏转为亮屏时，使用AirDrop分享orderFile文件到电脑
+
+5. 使用iPhone的距离传感器事件，触发OrderFile文件写入和文件分享。
 
 ---
 
@@ -82,14 +51,6 @@ end
 
 ```objc
     [OrzOrderFile shareOrderFileWithAirDrop];
-```
-
-## App 示例工程
-
-一行命令，打开示例工程: 
-
-```bash
-rm -rf OrzOrderFile && git clone https://github.com/OrzGeeker/OrzOrderFile.git && cd OrzOrderFile/App && bundle && bundle exec pod install && xed .
 ```
 
 ## 参考文档
