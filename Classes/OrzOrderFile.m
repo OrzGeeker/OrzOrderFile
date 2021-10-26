@@ -47,7 +47,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     NSError *error = nil;
     [orderFileContent writeToFile:orderFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
     NSLog(@"OrzClang: 写入文件(%@)", !error ? @"成功" : @"失败");
-    NSLog(@"OrzClang: OrderFilePath: %@", orderFilePath);
+    NSLog(@"OrzClang: OrderFilePath = %@", orderFilePath);
     return error ? nil : orderFilePath;
 }
 + (NSString *)orderFileContentWithFilePath:(NSString *)orderFilePath {
@@ -92,9 +92,12 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     return _writeOrderFileQueue;
 }
 + (NSString *)orderFilePath {
-    NSString *orderFile = @"order.txt";
+    NSString *orderFileName = [NSBundle bundleForClass:self].executablePath.pathComponents.lastObject;
+    if(!orderFileName) {
+        return nil;
+    }
     NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *orderFilePath = [docDir stringByAppendingPathComponent:orderFile];
+    NSString *orderFilePath = [docDir stringByAppendingPathComponent:orderFileName];
     return orderFilePath;
 }
 + (UIViewController *)getCurrentVC{

@@ -40,6 +40,8 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols() {
         dladdr(node->pc, &info);
         
         NSString *symbol = [NSString stringWithUTF8String:info.dli_sname];
+        BOOL isObjc = [symbol hasPrefix:@"-["] || [symbol hasPrefix:@"+["];
+        symbol = isObjc ? symbol : [@"_" stringByAppendingString:symbol];
         if (symbol.length > 0 && ![symbols containsObject:symbol]) {
             [symbols insertObject:symbol atIndex:0];
         }

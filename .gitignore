@@ -69,6 +69,7 @@ iOSInjectionProject/
 
 App/vendor
 App/Podfile.lock
+App/OrzOrderFile
 App/App.xcworkspace
 App/Pods
 .DS_Store
