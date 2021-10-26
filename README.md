@@ -34,25 +34,6 @@ install! 'cocoapods',
 
 ---
 
-    
-- 在需要将符号写入OrderFile文件中时，调用如下代码：
-
-```objc
-    [OrzOrderFile stopRecordOrderFileSymbols];
-```
-
-- 获取OrderFile文件内容，调用如下代码:
-
-```objc
-    NSString *orderFileContent = [OrzOrderFile orderFileContent];
-```
-
-- 通过AirDrop功能分享OrderFile文件到电脑上，调用如下代码:
-
-```objc
-    [OrzOrderFile shareOrderFileWithAirDrop];
-```
-
 ## 参考文档
 
 - [二进制重排原理](http://www.zyiz.net/tech/detail-127196.html)

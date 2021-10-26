@@ -11,16 +11,26 @@
 extern BOOL isStopRecordOrderFileSymbols;
 extern NSArray<NSString *>* getOrderFileSymbols(void);
 
+@interface OrzOrderFile()
+@property (nonatomic, strong) dispatch_queue_t writeOrderFileQueue;
+@end
 @implementation OrzOrderFile
-+ (void)stopRecordOrderFileSymbols {
++ (void)stopRecordOrderFileSymbolsWithCompletion:(void (^)(NSString * _Nullable))completion {
     if(!isStopRecordOrderFileSymbols) {
         isStopRecordOrderFileSymbols = YES;
-        [OrzOrderFile writeToFileWithSymbols:getOrderFileSymbols()];
+        dispatch_async([OrzOrderFile shared].writeOrderFileQueue, ^{
+            NSString *orderFilePath = [OrzOrderFile writeToFileWithSymbols:getOrderFileSymbols()];
+            if(completion) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(orderFilePath);
+                });
+            }
+        });
     }
 }
-+ (void)writeToFileWithSymbols:(NSArray *)symbols {
++ (NSString *)writeToFileWithSymbols:(NSArray *)symbols {
     if(symbols.count <= 0) {
-        return;
+        return nil;
     }
     NSString *orderFilePath = [OrzOrderFile orderFilePath];
     NSString *orderFileContent = [symbols componentsJoinedByString:@"\n"];
@@ -28,6 +38,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     [orderFileContent writeToFile:orderFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
     NSLog(@"OrzClang: 写入文件(%@)", !error ? @"成功" : @"失败");
     NSLog(@"order file path: %@", orderFilePath);
+    return error ? nil : orderFilePath;
 }
 + (NSString *)orderFileContent {
     NSString *orderFilePath = [OrzOrderFile orderFilePath];
@@ -67,6 +78,12 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     }
 }
 #pragma mark - 私有方法
+- (dispatch_queue_t)writeOrderFileQueue {
+    if(!_writeOrderFileQueue) {
+        _writeOrderFileQueue = dispatch_queue_create("com.orz.order.file.write.queue", DISPATCH_QUEUE_SERIAL);
+    }
+    return _writeOrderFileQueue;
+}
 + (NSString *)orderFilePath {
     NSString *orderFile = @"order.txt";
     NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
@@ -129,7 +146,8 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     });
 }
 - (void)deviceProximityStateChange:(NSNotification *)notification {
-    [OrzOrderFile stopRecordOrderFileSymbols];
-    [OrzOrderFile shareOrderFileWithAirDrop];
+    [OrzOrderFile stopRecordOrderFileSymbolsWithCompletion:^(NSString * _Nullable orderFilePath) {
+        [OrzOrderFile shareOrderFileWithAirDrop];
+    }];
 }
 @end

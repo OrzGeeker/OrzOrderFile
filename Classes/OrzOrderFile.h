@@ -10,9 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OrzOrderFile : NSObject
-+ (void)stopRecordOrderFileSymbols;
-+ (void)writeToFileWithSymbols:(NSArray *)symbols;
-+ (nullable NSString *)orderFileContent;
++ (void)stopRecordOrderFileSymbolsWithCompletion:(void (^ _Nullable)(NSString * _Nullable orderFilePath))completion;
 + (void)shareOrderFileWithAirDrop;
 + (void)setup;
 @end

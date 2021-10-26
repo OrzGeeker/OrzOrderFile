@@ -50,15 +50,8 @@
                             <constraint firstItem="gpc-Ui-yFC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="y2Q-za-Zrq"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="oPK-cd-keF">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="8fy-5m-LfA">
-                            <connections>
-                                <action selector="shareAction:" destination="BYZ-38-t0r" id="qJs-zf-i59"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="oPK-cd-keF"/>
                     <connections>
-                        <outlet property="shareBtn" destination="8fy-5m-LfA" id="fON-h1-yi4"/>
                         <outlet property="stopRecordBtn" destination="OPB-tr-sOc" id="rvg-RU-567"/>
                         <outlet property="symbolsTextView" destination="gpc-Ui-yFC" id="Y0u-Di-nqr"/>
                     </connections>
