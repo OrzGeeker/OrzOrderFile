@@ -8,10 +8,10 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
 @interface OrzOrderFile : NSObject
 + (void)stopRecordOrderFileSymbolsWithCompletion:(void (^ _Nullable)(NSString * _Nullable orderFilePath))completion;
-+ (void)shareOrderFileWithAirDrop;
++ (NSString *)orderFileContentWithFilePath:(NSString *_Nullable)orderFilePath;
++ (void)shareByAirDropWithOrderFilePath:(NSString * _Nullable)orderFilePath;
 + (void)setup;
 @end
 

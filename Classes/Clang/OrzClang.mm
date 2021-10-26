@@ -25,10 +25,13 @@ typedef struct{
 
 BOOL isStopRecordOrderFileSymbols = NO;
 
+static long long symbolTotalCount = 0;
 extern "C" NSArray<NSString *>* getOrderFileSymbols() {
+    NSLog(@"OrzOrderFile: 共计%@个符号(处理前)", @(symbolTotalCount));
     NSMutableArray<NSString *> *symbols = [NSMutableArray array];
-    
+    static long long currentProcessSymbolIndex = 0;
     while(true) {
+        currentProcessSymbolIndex++;
         // offsetof 找到结构体某个属性的相对偏移量
         SymbolNode * node = (SymbolNode *)OSAtomicDequeue(&symboList, offsetof(SymbolNode, next));
         if (node == NULL) break;
@@ -41,6 +44,7 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols() {
             [symbols insertObject:symbol atIndex:0];
         }
     }
+    NSLog(@"OrzOrderFile: 共计%@个符号(处理后)", @(symbols.count));
     return symbols.copy;
 }
 
@@ -72,5 +76,6 @@ extern "C" void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     SymbolNode * node = (SymbolNode *)malloc(sizeof(SymbolNode));
     *node = (SymbolNode){PC,NULL};
     OSAtomicEnqueue(&symboList, node, offsetof(SymbolNode, next));
+    symbolTotalCount++;
 }
 #endif

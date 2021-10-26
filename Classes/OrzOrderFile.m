@@ -27,6 +27,16 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
             }
         });
     }
+    else {
+        if(completion) {
+            NSString *orderFilePath = [OrzOrderFile orderFilePath];
+            if([[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
+                completion(orderFilePath);
+            } else {
+                completion(nil);
+            }
+        }
+    }
 }
 + (NSString *)writeToFileWithSymbols:(NSArray *)symbols {
     if(symbols.count <= 0) {
@@ -37,43 +47,40 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     NSError *error = nil;
     [orderFileContent writeToFile:orderFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
     NSLog(@"OrzClang: 写入文件(%@)", !error ? @"成功" : @"失败");
-    NSLog(@"order file path: %@", orderFilePath);
+    NSLog(@"OrzClang: OrderFilePath: %@", orderFilePath);
     return error ? nil : orderFilePath;
 }
-+ (NSString *)orderFileContent {
-    NSString *orderFilePath = [OrzOrderFile orderFilePath];
++ (NSString *)orderFileContentWithFilePath:(NSString *)orderFilePath {
     if([[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
         return [NSString stringWithContentsOfFile:orderFilePath encoding:NSUTF8StringEncoding error:nil];
     }
     return nil;
 }
-+ (void)shareOrderFileWithAirDrop {
-    NSString *orderFilePath = [OrzOrderFile orderFilePath];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
-        NSLog(@"OrzOrderFile: 还未生成OrderFile");
++ (void)shareByAirDropWithOrderFilePath:(NSString *)orderFilePath {
+    if(!orderFilePath || ![[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
+        NSLog(@"OrzOrderFile: 无效OrderFile文件路径！");
         return;
     }
-    NSURL *url = [NSURL fileURLWithPath:orderFilePath];
-    NSArray *objectsToShare = @[url];
-    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    controller.excludedActivityTypes = @[
-        UIActivityTypePostToTwitter,
-        UIActivityTypePostToFacebook,
-        UIActivityTypePostToWeibo,
-        UIActivityTypeMessage,
-        UIActivityTypeMail,
-        UIActivityTypePrint,
-        UIActivityTypeCopyToPasteboard,
-        UIActivityTypeAssignToContact,
-        UIActivityTypeSaveToCameraRoll,
-        UIActivityTypeAddToReadingList,
-        UIActivityTypePostToFlickr,
-        UIActivityTypePostToVimeo,
-        UIActivityTypePostToTencentWeibo,
-    ];
-    
     UIViewController *currentVC = [OrzOrderFile getCurrentVC];
     if(![currentVC isKindOfClass:UIActivityViewController.class]) {
+        NSURL *url = [NSURL fileURLWithPath:orderFilePath];
+        NSArray *objectsToShare = @[url];
+        UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+        controller.excludedActivityTypes = @[
+            UIActivityTypePostToTwitter,
+            UIActivityTypePostToFacebook,
+            UIActivityTypePostToWeibo,
+            UIActivityTypeMessage,
+            UIActivityTypeMail,
+            UIActivityTypePrint,
+            UIActivityTypeCopyToPasteboard,
+            UIActivityTypeAssignToContact,
+            UIActivityTypeSaveToCameraRoll,
+            UIActivityTypeAddToReadingList,
+            UIActivityTypePostToFlickr,
+            UIActivityTypePostToVimeo,
+            UIActivityTypePostToTencentWeibo,
+        ];
         [currentVC presentViewController:controller animated:YES completion:nil];
     }
 }
@@ -147,7 +154,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
 }
 - (void)deviceProximityStateChange:(NSNotification *)notification {
     [OrzOrderFile stopRecordOrderFileSymbolsWithCompletion:^(NSString * _Nullable orderFilePath) {
-        [OrzOrderFile shareOrderFileWithAirDrop];
+        [OrzOrderFile shareByAirDropWithOrderFilePath:orderFilePath];
     }];
 }
 @end

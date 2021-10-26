@@ -25,11 +25,9 @@
 
 - (void)stopRecordAction:(UIButton *)sender {
     [OrzOrderFile stopRecordOrderFileSymbolsWithCompletion:^(NSString * _Nullable orderFilePath) {
-        NSString *orderFileContent = [NSString stringWithContentsOfFile:orderFilePath encoding:NSUTF8StringEncoding error:nil];
-        self.symbolsTextView.text = orderFileContent;
+        self.symbolsTextView.text = [OrzOrderFile orderFileContentWithFilePath:orderFilePath];
         self.stopRecordBtn.hidden = YES;
         self.title = @"OrderFile内容如下";
     }];
-
 }
 @end
