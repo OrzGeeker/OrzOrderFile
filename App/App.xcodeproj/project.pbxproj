@@ -124,17 +124,17 @@
 		F3B464272723194100DF4DB3 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F3C4D34027246BC200C3BDB5 /* App-Bridging-Header.h */,
 				F3B464282723194100DF4DB3 /* AppDelegate.h */,
-				F3C4D34127246BC300C3BDB5 /* SwiftTest.swift */,
 				F3B464292723194100DF4DB3 /* AppDelegate.m */,
+				F3B464342723194300DF4DB3 /* Assets.xcassets */,
+				F3B464392723194300DF4DB3 /* Info.plist */,
+				F3B464362723194300DF4DB3 /* LaunchScreen.storyboard */,
+				F3B4643A2723194300DF4DB3 /* main.m */,
+				F3B464312723194100DF4DB3 /* Main.storyboard */,
+				F3C4D34127246BC300C3BDB5 /* SwiftTest.swift */,
 				F3B4642E2723194100DF4DB3 /* ViewController.h */,
 				F3B4642F2723194100DF4DB3 /* ViewController.m */,
-				F3B464312723194100DF4DB3 /* Main.storyboard */,
-				F3B464342723194300DF4DB3 /* Assets.xcassets */,
-				F3B464362723194300DF4DB3 /* LaunchScreen.storyboard */,
-				F3B464392723194300DF4DB3 /* Info.plist */,
-				F3B4643A2723194300DF4DB3 /* main.m */,
-				F3C4D34027246BC200C3BDB5 /* App-Bridging-Header.h */,
 			);
 			path = App;
 			sourceTree = "<group>";
