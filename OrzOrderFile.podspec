@@ -135,7 +135,6 @@ Pod::Spec.new do |spec|
   # spec.dependency "JSONKit", "~> 1.4"
   app_order_file_path = '${SRCROOT}/' + spec.name
   spec.user_target_xcconfig = {
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '',
     'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER' => 'NO',
     'LD_GENERATE_MAP_FILE' => 'YES',
 #    'ORDER_FILE' => app_order_file_path
