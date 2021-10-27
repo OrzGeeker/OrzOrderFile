@@ -137,7 +137,7 @@ Pod::Spec.new do |spec|
   spec.user_target_xcconfig = {
     'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER' => 'NO',
     'LD_GENERATE_MAP_FILE' => 'YES',
-#    'ORDER_FILE' => app_order_file_path
+    #    'ORDER_FILE' => app_order_file_path
   }
   
   # 添加编译前脚本
@@ -148,13 +148,13 @@ Pod::Spec.new do |spec|
   ORDER_FILE="#{spec.name}"
   if [ ! -f $ORDER_FILE ]; then
     touch $ORDER_FILE
-  fi
-  echo "🚕🚕🚕🚕🚕🚕🚕🚕🚕🚕"
-  EOF
-  
-  spec.script_phase = {
-    :name => 'Create Empty Order File If Not Exist',
-    :script => script,
-    :execution_position => :before_compile
-  }
-end
+    fi
+    echo "🚕🚕🚕🚕🚕🚕🚕🚕🚕🚕"
+    EOF
+    
+    spec.script_phase = {
+      :name => 'Create Empty Order File If Not Exist',
+      :script => script,
+      :execution_position => :before_compile
+    }
+  end
