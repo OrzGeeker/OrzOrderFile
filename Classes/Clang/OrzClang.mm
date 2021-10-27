@@ -12,10 +12,13 @@
 #ifdef DEBUG
 
 #import "OrzOrderFile.h"
-#import <dlfcn.h>
-#import <libkern/OSAtomic.h>
 #import <set>
 #import <vector>
+
+extern "C" {
+
+#import <dlfcn.h>
+#import <libkern/OSAtomic.h>
 
 //原子队列
 static OSQueueHead symboList = OS_ATOMIC_QUEUE_INIT;
@@ -25,13 +28,13 @@ typedef struct{
     void * next;
 }SymbolNode;
 
-BOOL isStopRecordOrderFileSymbols = NO;
-
 static long long symbolTotalCount = 0;
-extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
+
+BOOL isStopRecordOrderFileSymbols = NO;
+NSArray<NSString *>* getOrderFileSymbols(void) {
     NSLog(@"OrzOrderFile: 共收集%@个符号(处理前)", @(symbolTotalCount));
     NSMutableArray<NSString *> *symbols = [NSMutableArray array];
-
+    
     NSLog(@"OrzOrderFile: 预处理收集符号开始");
     NSDate *preStartDate = [NSDate date];
     
@@ -82,9 +85,8 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
 }
 
 #pragma mark - Clang 插桩代码
-
-extern "C" void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
-                                                    uint32_t *stop) {
+void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
+                                         uint32_t *stop) {
     static uint32_t N;  // Counter for the guards.
     if (start == stop || *start) return;  // Initialize only once.
     // NSLog(@"INIT: %p %p\n", start, stop);
@@ -92,7 +94,7 @@ extern "C" void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
         *x = ++N;  // Guards should start from 1.
 }
 
-extern "C" void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
+void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     if (!*guard) return;  // Duplicate the guard check.
     
     static BOOL isSetup = NO;
@@ -111,5 +113,7 @@ extern "C" void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     *node = (SymbolNode){PC,NULL};
     OSAtomicEnqueue(&symboList, node, offsetof(SymbolNode, next));
     symbolTotalCount++;
+}
+
 }
 #endif

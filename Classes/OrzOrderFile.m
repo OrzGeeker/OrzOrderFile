@@ -7,9 +7,7 @@
 
 #import "OrzOrderFile.h"
 #import <UIKit/UIKit.h>
-
-extern BOOL isStopRecordOrderFileSymbols;
-extern NSArray<NSString *>* getOrderFileSymbols(void);
+#import "OrzClang.h"
 
 @interface OrzOrderFile()
 @property (nonatomic, strong) dispatch_queue_t writeOrderFileQueue;
