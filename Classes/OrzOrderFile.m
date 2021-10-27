@@ -91,7 +91,10 @@
     return _writeOrderFileQueue;
 }
 + (NSString *)orderFilePath {
-    NSString *orderFileName = [[NSBundle bundleForClass:self].bundlePath.lastPathComponent componentsSeparatedByString:@"."].firstObject;
+    NSString *lastPathComponent = [NSBundle bundleForClass:self].bundlePath.lastPathComponent;
+    NSString *splitChar = @".";
+    NSString *txtExt = @"txt";
+    NSString *orderFileName = [@[[lastPathComponent componentsSeparatedByString:splitChar].firstObject, txtExt] componentsJoinedByString:splitChar];
     if(!orderFileName) {
         return nil;
     }
