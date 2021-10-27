@@ -32,6 +32,7 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
     NSLog(@"OrzOrderFile: 共收集%@个符号(处理前)", @(symbolTotalCount));
     NSMutableArray<NSString *> *symbols = [NSMutableArray array];
 
+    NSLog(@"OrzOrderFile: 预处理收集符号开始");
     NSDate *preStartDate = [NSDate date];
     
     std::set<void *> s;
@@ -51,6 +52,7 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
     long long currentProcessSymbolIndex = 0;
     long long estimateMaxParseSymbolCount = 1E4;
     
+    NSLog(@"OrzOrderFile: 符号解析开始");
     NSDate *startDate = [NSDate date];
     for(auto it = v.rbegin(); it != v.rend(); it++) {
         currentProcessSymbolIndex++;
@@ -97,6 +99,7 @@ extern "C" void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     if(!isSetup) {
         isSetup = YES;
         [OrzOrderFile setup];
+        NSLog(@"OrzOrderFile: 开始收集符号");
     }
     
     if (isStopRecordOrderFileSymbols) {

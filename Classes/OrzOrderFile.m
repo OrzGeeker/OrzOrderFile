@@ -18,6 +18,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
 + (void)stopRecordOrderFileSymbolsWithCompletion:(void (^)(NSString * _Nullable))completion {
     if(!isStopRecordOrderFileSymbols) {
         isStopRecordOrderFileSymbols = YES;
+        NSLog(@"OrzOrderFile: 停止收集符号");
         dispatch_async([OrzOrderFile shared].writeOrderFileQueue, ^{
             NSString *orderFilePath = [OrzOrderFile writeToFileWithSymbols:getOrderFileSymbols()];
             if(completion) {
