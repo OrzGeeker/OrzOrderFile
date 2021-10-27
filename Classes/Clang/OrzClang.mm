@@ -56,7 +56,7 @@ extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
         currentProcessSymbolIndex++;
         if(currentProcessSymbolIndex == estimateMaxParseSymbolCount) {
             NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:startDate];
-            NSLog(@"OrzOrderFile: 处理%@个符号耗时 = %@s, 预计全部处理需要 = %@s", @(estimateMaxParseSymbolCount), @(duration), @(v.size() / (double)currentProcessSymbolIndex * duration));
+            NSLog(@"OrzOrderFile: 处理%@个符号耗时 = %@s, 预估全部处理完成，最长需要 = %@s", @(estimateMaxParseSymbolCount), @(duration), @(v.size() / (double)currentProcessSymbolIndex * duration));
         }
         
         if(!s.count(*it)) {
