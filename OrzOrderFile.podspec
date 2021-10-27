@@ -117,7 +117,7 @@ Pod::Spec.new do |spec|
   #
   
   # spec.framework  = "SomeFramework"
-  spec.frameworks = "Foundation", "UIKit"
+  # spec.frameworks = "Foundation", "UIKit"
   
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
@@ -135,7 +135,6 @@ Pod::Spec.new do |spec|
   # spec.dependency "JSONKit", "~> 1.4"
   app_order_file_path = '${SRCROOT}/' + spec.name
   spec.user_target_xcconfig = {
-    'ARCHS[sdk=iphonesimulator*]' => '$(ARCHS_STANDARD_64_BIT)',
     'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER' => 'NO',
     'LD_GENERATE_MAP_FILE' => 'YES',
 #    'ORDER_FILE' => app_order_file_path
