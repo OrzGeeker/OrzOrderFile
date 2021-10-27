@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
   
   spec.name         = "OrzOrderFile"
-  spec.version      = "0.0.1"
+  spec.version      = "0.0.2"
   spec.summary      = "generate the order file for iOS project with source code compiled"
   
   # This description is used to generate tags and improve search results.
