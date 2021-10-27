@@ -14,6 +14,8 @@
 #import "OrzOrderFile.h"
 #import <dlfcn.h>
 #import <libkern/OSAtomic.h>
+#import <set>
+#import <vector>
 
 //原子队列
 static OSQueueHead symboList = OS_ATOMIC_QUEUE_INIT;
@@ -26,27 +28,54 @@ typedef struct{
 BOOL isStopRecordOrderFileSymbols = NO;
 
 static long long symbolTotalCount = 0;
-extern "C" NSArray<NSString *>* getOrderFileSymbols() {
-    NSLog(@"OrzOrderFile: 共计%@个符号(处理前)", @(symbolTotalCount));
+extern "C" NSArray<NSString *>* getOrderFileSymbols(void) {
+    NSLog(@"OrzOrderFile: 共收集%@个符号(处理前)", @(symbolTotalCount));
     NSMutableArray<NSString *> *symbols = [NSMutableArray array];
-    static long long currentProcessSymbolIndex = 0;
+
+    NSDate *preStartDate = [NSDate date];
+    
+    std::set<void *> s;
+    std::vector<void *> v;
     while(true) {
-        currentProcessSymbolIndex++;
-        // offsetof 找到结构体某个属性的相对偏移量
         SymbolNode * node = (SymbolNode *)OSAtomicDequeue(&symboList, offsetof(SymbolNode, next));
-        if (node == NULL) break;
+        if (node == NULL) {
+            NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:preStartDate];
+            NSLog(@"OrzOrderFile: 预处理耗时 = %@s(去重后：%lu, 总计：%lu)", @(duration), s.size(), v.size());
+            break;
+        }
+        v.push_back(node->pc);
+        s.insert(node->pc);
+        free(node);
+    }
+    
+    long long currentProcessSymbolIndex = 0;
+    long long estimateMaxParseSymbolCount = 1E4;
+    
+    NSDate *startDate = [NSDate date];
+    for(auto it = v.rbegin(); it != v.rend(); it++) {
+        currentProcessSymbolIndex++;
+        if(currentProcessSymbolIndex == estimateMaxParseSymbolCount) {
+            NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:startDate];
+            NSLog(@"OrzOrderFile: 处理%@个符号耗时 = %@s, 预计全部处理需要 = %@s", @(estimateMaxParseSymbolCount), @(duration), @(v.size() / (double)currentProcessSymbolIndex * duration));
+        }
         
+        if(!s.count(*it)) {
+            continue;
+        }
+        s.erase(*it);
+        
+        // 符号解析
         Dl_info info;
-        dladdr(node->pc, &info);
-        
+        dladdr(*it, &info);
         NSString *symbol = [NSString stringWithUTF8String:info.dli_sname];
         BOOL isObjc = [symbol hasPrefix:@"-["] || [symbol hasPrefix:@"+["];
         symbol = isObjc ? symbol : [@"_" stringByAppendingString:symbol];
-        if (symbol.length > 0 && ![symbols containsObject:symbol]) {
-            [symbols insertObject:symbol atIndex:0];
+        if (symbol.length > 0) {
+            [symbols addObject:symbol];
         }
     }
-    NSLog(@"OrzOrderFile: 共计%@个符号(处理后)", @(symbols.count));
+    
+    NSLog(@"OrzOrderFile: 共计%@个符号(处理后), 总耗时: %@s", @(symbols.count), @([[NSDate date] timeIntervalSinceDate:preStartDate]));
     return symbols.copy;
 }
 

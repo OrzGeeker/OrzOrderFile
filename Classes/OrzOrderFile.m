@@ -46,8 +46,8 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     NSString *orderFileContent = [symbols componentsJoinedByString:@"\n"];
     NSError *error = nil;
     [orderFileContent writeToFile:orderFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    NSLog(@"OrzClang: 写入文件(%@)", !error ? @"成功" : @"失败");
-    NSLog(@"OrzClang: OrderFilePath = %@", orderFilePath);
+    NSLog(@"OrzOrderFile: 写入文件(%@)", !error ? @"成功" : @"失败");
+    NSLog(@"OrzOrderFile: OrderFilePath = %@", orderFilePath);
     return error ? nil : orderFilePath;
 }
 + (NSString *)orderFileContentWithFilePath:(NSString *)orderFilePath {
@@ -92,7 +92,7 @@ extern NSArray<NSString *>* getOrderFileSymbols(void);
     return _writeOrderFileQueue;
 }
 + (NSString *)orderFilePath {
-    NSString *orderFileName = [NSBundle bundleForClass:self].executablePath.pathComponents.lastObject;
+    NSString *orderFileName = [[NSBundle bundleForClass:self].bundlePath.lastPathComponent componentsSeparatedByString:@"."].firstObject;
     if(!orderFileName) {
         return nil;
     }
