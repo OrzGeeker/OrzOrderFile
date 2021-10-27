@@ -139,6 +139,7 @@ Pod::Spec.new do |spec|
     'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER' => 'NO',
     'LD_GENERATE_MAP_FILE' => 'YES',
 #    'ORDER_FILE' => app_order_file_path
+    'ARCHS' => 'arm64 armv7',
   }
   
   # 添加编译前脚本
