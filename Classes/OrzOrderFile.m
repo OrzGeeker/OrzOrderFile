@@ -146,9 +146,19 @@
 
 - (instancetype)init {
     if(self = [super init]) {
+        [self deleteExistOrderFile];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidLaunchFinished:) name:UIApplicationDidFinishLaunchingNotification object:nil];
     }
     return self;
+}
+
+- (void)deleteExistOrderFile {
+    NSString *orderFilePath = [OrzOrderFile orderFilePath];
+    if([[NSFileManager defaultManager] fileExistsAtPath:orderFilePath]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtPath:orderFilePath error:&error];
+        NSLog(@"OrzOrderFile: 删除已存在的OrderFile文件(%@)", error ? @"失败" : @"成功");
+    }
 }
 
 - (void)appDidLaunchFinished:(NSNotification *)notification {
