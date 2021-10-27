@@ -19,33 +19,33 @@
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gpc-Ui-yFC">
                                 <rect key="frame" x="10" y="88" width="394" height="774"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" shipmentTrackingNumber="YES"/>
                             </textView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OPB-tr-sOc">
-                                <rect key="frame" x="10" y="763" width="394" height="99"/>
+                                <rect key="frame" x="0.0" y="763" width="414" height="99"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="99" id="5Ry-Ni-v6u"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="符号写入文件">
-                                    <color key="titleColor" systemColor="labelColor"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="gpc-Ui-yFC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="1mj-me-g7k"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gpc-Ui-yFC" secondAttribute="trailing" constant="10" id="3yT-oa-oi7"/>
                             <constraint firstItem="gpc-Ui-yFC" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="8sZ-0c-KkR"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OPB-tr-sOc" secondAttribute="trailing" constant="10" id="BDc-Or-3Fg"/>
-                            <constraint firstItem="OPB-tr-sOc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="Usi-iQ-OHY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OPB-tr-sOc" secondAttribute="trailing" id="BDc-Or-3Fg"/>
+                            <constraint firstItem="OPB-tr-sOc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Usi-iQ-OHY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OPB-tr-sOc" secondAttribute="bottom" id="nI0-fX-6xV"/>
                             <constraint firstItem="gpc-Ui-yFC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="y2Q-za-Zrq"/>
                         </constraints>
@@ -63,9 +63,9 @@
         <!--Navigation Controller-->
         <scene sceneID="Cu1-HT-at4">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2aL-sP-qhS" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" interfaceStyle="dark" id="2aL-sP-qhS" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2Tc-a1-b3Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="2Tc-a1-b3Q">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -80,12 +80,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
